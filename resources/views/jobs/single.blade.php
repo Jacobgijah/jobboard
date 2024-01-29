@@ -27,7 +27,7 @@
     
     <div class="container">
       @if (\Session::has('apply'))
-          <div class="alert alert-success" style="margin-top: 10px;">
+          <div class="alert alert-warning" style="margin-top: 10px;">
             <p>{!! \Session::get('apply') !!}</p>
           </div>
       @endif
@@ -153,10 +153,12 @@
               </div>
             </div>
 
-            <div class="bg-light p-3 border rounded mb-4">
-              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Categories</h3>
+            <div class="bg-light p-3 border mt-3 rounded mb-4">
+              <h3 class="text-primary h5 pl-3 mb-3 ">Categories</h3>
               <ul class="list-unstyled pl-3 mb-0">
-                <li class="mb-2"><strong class="text-black">Application Deadline:</strong> {{ $job->application_deadline }}</li>
+              @foreach ($categories as $category) 
+                <li class="mb-2"><a class="text-decoration-none" href="{{ route('categories.single', $category->name) }}"> {{ $category->name }} </a></li>
+              @endforeach
               </ul>
             </div>
 
