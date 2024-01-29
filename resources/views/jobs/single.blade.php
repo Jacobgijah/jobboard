@@ -25,6 +25,22 @@
       @endif
     </div>
     
+    <div class="container">
+      @if (\Session::has('apply'))
+          <div class="alert alert-success" style="margin-top: 10px;">
+            <p>{!! \Session::get('apply') !!}</p>
+          </div>
+      @endif
+    </div>
+
+    <div class="container">
+      @if (\Session::has('applied'))
+          <div class="alert alert-success" style="margin-top: 10px;">
+            <p>{!! \Session::get('applied') !!}</p>
+          </div>
+      @endif
+    </div>
+    
     <section class="site-section">
       <div class="container">
         <div class="row align-items-center mb-5">
@@ -90,11 +106,25 @@
                   @else
                     <button name="submit" type="submit" class="btn btn-block btn-light btn-md"><i class="icon-heart"></i> Save Job</button>
                   @endif
-                  
+                </form>  
                 <!--add text-danger to it to make it read-->
               </div>
               <div class="col-6">
-                <button class="btn btn-block btn-primary btn-md">Apply Now</button>
+                <form action="{{ route('apply.job') }}" method="POST">
+                    @csrf
+                    <input name="cv" type="hidden" value="{{ Auth::user()->cv }}">
+                    <input name="job_id" type="hidden" value="{{ $job->id }}">
+                    <input name="job_image" type="hidden" value="{{ $job->image }}">
+                    <input name="job_title" type="hidden" value="{{ $job->job_title }}">
+                    <input name="job_region" type="hidden" value="{{ $job->job_region }}">
+                    <input name="job_type" type="hidden" value="{{ $job->job_type }}">
+                    <input name="company" type="hidden" value="{{ $job->company }}">
+                    @if($appliedJob > 0)
+                      <button class="btn btn-block btn-success btn-md" disabled>Application Sent Successfully</button>
+                    @else
+                      <button type="submit" name="submit" class="btn btn-block btn-primary btn-md">Apply Now</button>
+                    @endif
+                </form>    
               </div>
             </div>
 
@@ -121,6 +151,13 @@
                 <a href="https://twitter.com/intent/tweet?text{{$job->job_title}}=&url={{ route('single.job', $job->id) }}" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-twitter"></span></a>
                 <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ route('single.job', $job->id) }}" class="pt-3 pb-3 pr-3 pl-0"><span class="icon-linkedin"></span></a>
               </div>
+            </div>
+
+            <div class="bg-light p-3 border rounded mb-4">
+              <h3 class="text-primary  mt-3 h5 pl-3 mb-3 ">Categories</h3>
+              <ul class="list-unstyled pl-3 mb-0">
+                <li class="mb-2"><strong class="text-black">Application Deadline:</strong> {{ $job->application_deadline }}</li>
+              </ul>
             </div>
 
           </div>
